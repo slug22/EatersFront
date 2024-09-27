@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+
+import OrderScreen from './screens/OrderScreen';
+import VenmoScreen from './screens/VenmoScreen';
+import AuthCodeScreen from './screens/AuthCodeScreen';
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Order') {
+              iconName = focused ? 'list' : 'list-outline';
+            } else if (route.name === 'Venmo') {
+              iconName = focused ? 'card' : 'card-outline';
+            } else if (route.name === 'Auth') {
+              iconName = focused ? 'key' : 'key-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="Order" component={OrderScreen} />
+        <Tab.Screen name="Venmo" component={VenmoScreen} />
+        <Tab.Screen name="Auth" component={AuthCodeScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
